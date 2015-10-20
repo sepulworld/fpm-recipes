@@ -5,22 +5,18 @@ class VoltdbPhpClient < FPM::Cookery::Recipe
   version     '1.2'
   source      'https://github.com/VoltDB/voltdb-client-php', :with => :git, :branch => "master"
 
+  #Require libboost-all-dev 1.53 or greater, won't work on Ubuntu 12.04
   depends       'php5-common'
-  build_depends 'php5-dev', 'gcc', 'make'
+  build_depends 'php5-dev', 'gcc', 'make', 'libboost-all-dev'
 
   def build
       safesystem "rm -rf #{builddir}/voltdb-client-cpp"
       safesystem "git clone https://github.com/VoltDB/voltdb-client-cpp.git #{builddir}/voltdb-client-cpp"
-      safesystem "git clone -b boost-1.59.0 https://github.com/boostorg/build.git #{builddir}/boost"
-      Dir.chdir "#{builddir}/boost" do
-        system './bootstrap.sh'
-        system './b2 install --prefix=usr/local'
-      end
       Dir.chdir "#{builddir}/voltdb-client-cpp" do
         system 'make'
       end
       system 'phpize'
-      system "./configure --with-voltdb=#{builddir}/voltdb-client-cpp --with-boost=#{builddir}/boost"
+      system "./configure --with-voltdb=#{builddir}/voltdb-client-cpp"
       make
   end
 
