@@ -14,8 +14,8 @@ class VoltdbPhpClient < FPM::Cookery::Recipe
       Dir.chdir "#{builddir}/voltdb-client-cpp" do
         system 'make'
       end
-      safesystem "git clone -b boost-1.59.0 https://github.com/boostorg/build.git #{builddir}/boost"
-      Dir.chdir "#{builddir}/boost" do
+      safesystem "git clone -b boost-1.59.0 https://github.com/boostorg/build.git #{builddir}/voltdb-client-cpp/boost"
+      Dir.chdir "#{builddir}/voltdb-client-cpp/boost" do
         system './bootstrap.sh'
         system './b2 install --prefix=/usr'
       end
