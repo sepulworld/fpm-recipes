@@ -11,8 +11,8 @@ class VoltdbPhpClient < FPM::Cookery::Recipe
   def build
       safesystem "rm -rf #{builddir}/voltdb-client-cpp"
       safesystem "git clone https://github.com/VoltDB/voltdb-client-cpp.git #{builddir}/voltdb-client-cpp"
-      safesystem "git clone -b boost-1.59.0 https://github.com/boostorg/build.git #{builddir}/voltdb-client-cpp/boost"
-      Dir.chdir "#{builddir}/voltdb-client-cpp/boost" do
+      safesystem "git clone -b boost-1.59.0 https://github.com/boostorg/build.git #{builddir}/boost"
+      Dir.chdir "#{builddir}/boost" do
         system './bootstrap.sh'
         system './b2 install --prefix=usr/local'
       end
@@ -20,7 +20,7 @@ class VoltdbPhpClient < FPM::Cookery::Recipe
         system 'make'
       end
       system 'phpize'
-      system "./configure --with-voltdb=#{builddir}/voltdb-client-cpp"
+      system "./configure --with-voltdb=#{builddir}/voltdb-client-cpp --with-boost=#{builddir}/boost"
       make
   end
 
